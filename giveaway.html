@@ -56,9 +56,9 @@
 												<header>
 							<h2>CIL & CO™ Giveaway</h2>
 
-     
+
 			<button class="button primary"  style="box-shadow:0px 0px 1px 1px #888888 inset!important;border-width: 5px;border-color: #fff" id="list" onclick="namelist();">List</button>
-			<button class="button primary"  style="box-shadow:0px 0px 1px 1px #888888!important;border-width: 5px;border-color: #fff" id="save" onclick="save();">Save</button>
+			<!--<button class="button primary"  style="box-shadow:0px 0px 1px 1px #888888!important;border-width: 5px;border-color: #fff" id="save" onclick="save();">Save</button>-->
 			<button class="button primary"  style="box-shadow:0px 0px 1px 1px #888888!important;border-width: 5px;border-color: #fff" id="go" onclick="go();">GO!</button>
   
 						</header>
@@ -74,7 +74,7 @@
 			<div id="varnote"><div class="copyright"></div></div>
 			
       <div id="popdown">
-      <div id="names" class="inbox"><textarea name="namesbox" id="namesbox"></textarea></div>
+      <div id="names" class="inbox"><textarea name="namesbox" id="namesbox" placeholder="Insert giveaway candidates ...&#10;&#10;example:&#10;reinaldotdj&#10;celineauw&#10;acil&#10;coco&#10;etc...">></textarea></div>
       </div>
       
       <div id="values"></div>
@@ -257,6 +257,7 @@ function removevictim(){
   $("div").remove(".name");
   $("div").remove(".extra");
   $('#headline').text('OK, done! Let\'s see who is next? Just click "GO!" button for next roll.');
+  namelist();
 }
 
 </script>
@@ -291,7 +292,9 @@ function removevictim(){
     AOS.init();
   </script>
 
-
+     <script type="text/javascript">
+namelist();
+</script>
 
 
 
