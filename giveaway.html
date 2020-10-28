@@ -136,6 +136,7 @@ function randOrd(){
 }
 
 function save(){
+	if(namesbox.value!=""){
         $("#varnote").hide();
         $("#popdown").show();
         $("#values").hide();
@@ -149,6 +150,9 @@ function save(){
         $("#go").attr("disabled", false);
         $("#save").attr("disabled", true);
         $("#list").attr("disabled", false);
+    }else{
+    	alert("please fill giveaway candidates")
+    }
 
 }
 
