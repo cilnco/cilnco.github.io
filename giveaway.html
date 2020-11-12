@@ -277,6 +277,14 @@ function removevictim(){
   namelist();
 }
 
+$(document).on('input propertychange', "textarea[name='namesbox']", function () {
+    if(namesbox.value==""){
+    	$("#save").attr("disabled", true);
+    }else{
+    	$("#save").attr("disabled", false);
+    }
+});
+
 </script>
 </div>
 </section>
