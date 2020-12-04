@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>CIL & CO™ | LinkTree</title>
+        <link rel="icon" href="favicon.ico" type="image/gif" sizes="48x48">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style type="text/css">
+        body, html {
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+canvas {
+    position:absolute;
+    top:0;
+    left:0;
+ 
+}
+    </style>
+
+    <style type="text/css">@import 'compass/css3';
+ body {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin: 0;
+     height: 100vh;
+     background: #333;
+}
+ .a {
+     --p: 0;
+     --q: calc(1 - var(--p));
+     overflow: hidden;
+     position: relative;
+     z-index: 1;
+     width: 12em;
+     background: #fff;
+     color: #000;
+     font: 700 1.125em/ 3 trebuchet ms, sans-serif;
+     text-align: center;
+     text-decoration: none;
+     text-transform: uppercase;
+}
+ .a:before, .a:after {
+     --i: var(--p);
+     --j: calc(1 - var(--i));
+     position: absolute;
+     z-index: -1;
+     top: 0;
+     bottom: 0;
+     left: calc(var(--j)*(100% - sqrt(pow(12em, 2)pow(3, 2))));
+     width: sqrt(pow(12em, 2)pow(3, 2));
+     transform-origin: calc(var(--j)*100%) calc(var(--i)*100%);
+     transform: rotate(atan(0.25)*-180deg/pi()) translate(calc(var(--q)*(1 - 2*var(--i))*-100%));
+     box-shadow: 0 0 0 1px currentcolor;
+     background: currentcolor;
+     color: #ef4654;
+     transition: transform 0.5s ease-in-out;
+     content: '';
+}
+ .a:after {
+     --i: var(--q);
+}
+ .a:hover, .a:focus {
+     --p: 1;
+}
+ 
+}   </style>
+<style type="text/css">.overlay{
+  position:absolute;
+height: 100%;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  z-index:1
+}</style>
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300" rel="stylesheet">
+<style>
+
+
+.button {
+    border-radius: 200px;
+font-family: Montserrat;
+background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  padding: 30px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  width: 70%;
+ 
+  margin-bottom: 20px;
+}
+
+.button1 {
+  
+  color: white; 
+  border: 2px solid #49fcd4;
+}
+
+.button1:hover {
+  background-color: #49fcd4;
+  color: white;
+}
+
+.button2 {
+
+  color: white; 
+  border: 2px solid #fb5533;
+}
+
+.button2:hover {
+  background-color: #fb5533;
+  color: white;
+}
+
+.button3 {
+
+  color: white; 
+  border: 2px solid #bc2a8d;
+}
+
+.button3:hover {
+  background-color: #bc2a8d;
+  color: white;
+}
+
+.button4 {
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7;
+}
+
+.button4:hover {background-color: #e7e7e7;}
+
+.button5 {
+  background-color: white;
+  color: black;
+  border: 2px solid #555555;
+}
+
+.button5:hover {
+  background-color: #555555;
+  color: white;
+}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"> <div class="container"> <div class="row">
+    <div class="col-sm-12"></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">B</div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">C</div>
+  </div>
+   <div class="row">
+    <div class="col-sm-12">D</div>
+  </div>
+</div></canvas>
+<div class="overlay">
+
+
+
+
+
+
+
+
+
+    <div style="width:100%; text-align: center; padding-top: 50px; padding-bottom: 50px;"><img src="https://cilnco.com/images/pic01.jpg" style="width:150px;border-radius: 50%"></div>
+<div style="width:100%; text-align: center"><a href="https://cilnco.com/"><button class="button button1">CIL & CO™ Website</button></a></div>
+<div style="width:100%; text-align: center"><a href="https://shopee.co.id/shop/324496651/"><button class="button button2">CIL & CO™ Shopee</button></a></div>
+<div style="width:100%; text-align: center"><a href="https://www.instagram.com/ciln.co/"><button class="button button3">CIL & CO™ Instagram</button></a></div>
+<div style="width:100%; text-align: center;font-family: Montserrat;font-size: 10px;margin-top: 100px">© CIL & CO™. All rights reserved. Design by CIL & CO™.</div>
+
+
+
+</div>
+</div>
+
+<script type="text/javascript">  (function () {
+      var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+              window.setTimeout(callback, 1000 / 60);
+          };
+      window.requestAnimationFrame = requestAnimationFrame;
+  })();
+
+  // Terrain stuff.
+  var background = document.getElementById("bgCanvas"),
+      bgCtx = background.getContext("2d"),
+      width = window.innerWidth,
+      height = document.body.offsetHeight;
+
+  (height < 400) ? height = 400 : height;
+
+  background.width = width;
+  background.height = height;
+
+  function Terrain(options) {
+      options = options || {};
+      this.terrain = document.createElement("canvas");
+      this.terCtx = this.terrain.getContext("2d");
+      this.scrollDelay = options.scrollDelay || 90;
+      this.lastScroll = new Date().getTime();
+
+      this.terrain.width = width;
+      this.terrain.height = height;
+      this.fillStyle = options.fillStyle || "#191D4C";
+      this.mHeight = options.mHeight || height;
+
+      // generate
+      this.points = [];
+
+      var displacement = options.displacement || 140,
+          power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2))));
+
+      // set the start height and end height for the terrain
+      this.points[0] = this.mHeight;//(this.mHeight - (Math.random() * this.mHeight / 2)) - displacement;
+      this.points[power] = this.points[0];
+
+      // create the rest of the points
+      for (var i = 1; i < power; i *= 2) {
+          for (var j = (power / i) / 2; j < power; j += power / i) {
+              this.points[j] = ((this.points[j - (power / i) / 2] + this.points[j + (power / i) / 2]) / 2) + Math.floor(Math.random() * -displacement + displacement);
+          }
+          displacement *= 0.6;
+      }
+
+      document.body.appendChild(this.terrain);
+  }
+
+  Terrain.prototype.update = function () {
+      // draw the terrain
+      this.terCtx.clearRect(0, 0, width, height);
+      this.terCtx.fillStyle = this.fillStyle;
+      
+      if (new Date().getTime() > this.lastScroll + this.scrollDelay) {
+          this.lastScroll = new Date().getTime();
+          this.points.push(this.points.shift());
+      }
+
+      this.terCtx.beginPath();
+      for (var i = 0; i <= width; i++) {
+          if (i === 0) {
+              this.terCtx.moveTo(0, this.points[0]);
+          } else if (this.points[i] !== undefined) {
+              this.terCtx.lineTo(i, this.points[i]);
+          }
+      }
+
+      this.terCtx.lineTo(width, this.terrain.height);
+      this.terCtx.lineTo(0, this.terrain.height);
+      this.terCtx.lineTo(0, this.points[0]);
+      this.terCtx.fill();
+  }
+
+
+  // Second canvas used for the stars
+  bgCtx.fillStyle = '#05004c';
+  bgCtx.fillRect(0, 0, width, height);
+
+  // stars
+  function Star(options) {
+      this.size = Math.random() * 2;
+      this.speed = Math.random() * .05;
+      this.x = options.x;
+      this.y = options.y;
+  }
+
+  Star.prototype.reset = function () {
+      this.size = Math.random() * 2;
+      this.speed = Math.random() * .05;
+      this.x = width;
+      this.y = Math.random() * height;
+  }
+
+  Star.prototype.update = function () {
+      this.x -= this.speed;
+      if (this.x < 0) {
+          this.reset();
+      } else {
+          bgCtx.fillRect(this.x, this.y, this.size, this.size);
+      }
+  }
+
+  function ShootingStar() {
+      this.reset();
+  }
+
+  ShootingStar.prototype.reset = function () {
+      this.x = Math.random() * width;
+      this.y = 0;
+      this.len = (Math.random() * 80) + 10;
+      this.speed = (Math.random() * 10) + 6;
+      this.size = (Math.random() * 1) + 0.1;
+      // this is used so the shooting stars arent constant
+      this.waitTime = new Date().getTime() + (Math.random() * 3000) + 500;
+      this.active = false;
+  }
+
+  ShootingStar.prototype.update = function () {
+      if (this.active) {
+          this.x -= this.speed;
+          this.y += this.speed;
+          if (this.x < 0 || this.y >= height) {
+              this.reset();
+          } else {
+              bgCtx.lineWidth = this.size;
+              bgCtx.beginPath();
+              bgCtx.moveTo(this.x, this.y);
+              bgCtx.lineTo(this.x + this.len, this.y - this.len);
+              bgCtx.stroke();
+          }
+      } else {
+          if (this.waitTime < new Date().getTime()) {
+              this.active = true;
+          }
+      }
+  }
+
+  var entities = [];
+
+  // init the stars
+  for (var i = 0; i < height; i++) {
+      entities.push(new Star({
+          x: Math.random() * width,
+          y: Math.random() * height
+      }));
+  }
+
+  // Add 2 shooting stars that just cycle.
+  entities.push(new ShootingStar());
+  entities.push(new ShootingStar());
+entities.push(new Terrain({mHeight : (height/2)-120}));
+entities.push(new Terrain({displacement : 120, scrollDelay : 50, fillStyle : "rgb(17,20,40)", mHeight : (height/2)-60}));
+  entities.push(new Terrain({displacement : 100, scrollDelay : 20, fillStyle : "rgb(10,10,5)", mHeight : height/2}));
+
+  //animate background
+  function animate() {
+      bgCtx.fillStyle = '#110E19';
+      bgCtx.fillRect(0, 0, width, height);
+      bgCtx.fillStyle = '#ffffff';
+      bgCtx.strokeStyle = '#ffffff';
+
+      var entLen = entities.length;
+
+      while (entLen--) {
+          entities[entLen].update();
+      }
+      requestAnimationFrame(animate);
+  }
+  animate();</script>
+</body>
+</html>
