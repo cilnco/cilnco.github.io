@@ -17,12 +17,13 @@
             color: #0077cc;
         }
         .group {
-            margin: 20px 0;
+            margin: 20px auto;
             padding: 20px;
             border: 1px solid #0077cc;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.8);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
         .team {
             margin: 10px 0;
@@ -40,7 +41,7 @@
             border: 1px solid #0077cc;
             border-radius: 5px;
             margin-right: 10px;
-            width: 200px;
+            width: calc(100% - 130px);
         }
         button {
             padding: 10px 15px;
@@ -53,6 +54,12 @@
         }
         button:hover {
             background: #005fa3;
+        }
+        .reset-button {
+            background: red;
+        }
+        .reset-button:hover {
+            background: darkred;
         }
         .loading {
             display: none;
@@ -84,31 +91,42 @@
         .alert.active {
             display: block;
         }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #0077cc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">Loading...</div>
+    <div class="loading" id="loading"><div class="spinner"></div> Loading...</div>
     <div class="alert" id="alert"></div>
 
     <h1>Assign Pemain Badminton</h1>
     <input type="text" id="playerName" placeholder="Masukkan Nama Anda" />
     <button onclick="addPlayer()">Tambahkan Pemain</button>
-    <button onclick="resetTokens()">Reset Semua Token</button>
+    <button class="reset-button" onclick="resetTokens()">Reset</button>
 
     <div class="group" id="groupA">
         <h2>Grup A</h2>
-        <div id="teamA1" class="team"></div>
-        <div id="teamA2" class="team"></div>
-        <div id="teamA3" class="team"></div>
-        <div id="teamA4" class="team"></div>
+        <div id="teamA1" class="team"><strong>Tim 1:</strong><br /></div>
+        <div id="teamA2" class="team"><strong>Tim 2:</strong><br /></div>
+        <div id="teamA3" class="team"><strong>Tim 3:</strong><br /></div>
+        <div id="teamA4" class="team"><strong>Tim 4:</strong><br /></div>
     </div>
 
     <div class="group" id="groupB">
         <h2>Grup B</h2>
-        <div id="teamB1" class="team"></div>
-        <div id="teamB2" class="team"></div>
-        <div id="teamB3" class="team"></div>
-        <div id="teamB4" class="team"></div>
+        <div id="teamB1" class="team"><strong>Tim 1:</strong><br /></div>
+        <div id="teamB2" class="team"><strong>Tim 2:</strong><br /></div>
+        <div id="teamB3" class="team"><strong>Tim 3:</strong><br /></div>
+        <div id="teamB4" class="team"><strong>Tim 4:</strong><br /></div>
     </div>
 
     <script>
@@ -234,8 +252,8 @@
                 hideLoading();
                 showAlert('Semua token telah direset.');
                 for (let i = 1; i <= 4; i++) {
-                    document.getElementById(`teamA${i}`).innerHTML = '';
-                    document.getElementById(`teamB${i}`).innerHTML = '';
+                    document.getElementById(`teamA${i}`).innerHTML = '<strong>Tim ' + i + ':</strong><br />';
+                    document.getElementById(`teamB${i}`).innerHTML = '<strong>Tim ' + i + ':</strong><br />';
                 }
             }).catch(err => {
                 hideLoading();
