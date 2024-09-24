@@ -9,67 +9,50 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1a1a1a; /* Dark background */
-            color: #f0f0f0; /* Light text for readability */
+            background-color: #f0f4f8;
+            color: #333;
             text-align: center;
-            max-width: 800px; /* Set maximum width for readability */
-            margin: auto; /* Center the content */
-            padding: 20px;
         }
         h1 {
-            color: #ff6347; /* Bright tomato color */
+            color: #0077cc;
         }
         .group {
             margin: 20px 0;
             padding: 20px;
-            border: 1px solid #ff6347;
+            border: 1px solid #0077cc;
             border-radius: 8px;
-            background: rgba(50, 50, 50, 0.8);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .team {
             margin: 10px 0;
             padding: 10px;
             border: 1px solid #aaa;
             border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
+            background: #e0f7fa;
             transition: background 0.3s;
         }
         .team:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: #b2ebf2;
         }
         input {
             padding: 10px;
-            border: 1px solid #ff6347;
+            border: 1px solid #0077cc;
             border-radius: 5px;
             margin-right: 10px;
-            width: 250px; /* Width adjustment for better readability */
-        }
-        input::placeholder {
-            color: #bbb; /* Placeholder color */
+            width: 200px;
         }
         button {
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
-            background: #ff6347; /* Bright tomato button */
+            background: #0077cc;
             color: white;
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            font-size: 16px; /* Increased font size */
+            transition: background 0.3s;
         }
         button:hover {
-            background: #e03e00;
-            transform: scale(1.05); /* Slight scaling effect */
-        }
-        button:active {
-            transform: scale(0.95); /* Press effect */
-        }
-        button.reset {
-            background: #ff3d3d; /* Red reset button */
-        }
-        button.reset:hover {
-            background: #cc0000; /* Darker red on hover */
+            background: #005fa3;
         }
         .loading {
             display: none;
@@ -78,22 +61,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.9);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-        }
-        .loader {
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #ff6347; /* Bright tomato */
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            font-size: 24px;
+            color: #0077cc;
         }
         .alert {
             display: none;
@@ -101,13 +74,12 @@
             top: 20%;
             left: 50%;
             transform: translateX(-50%);
-            background: #333;
-            border: 2px solid #ff6347;
+            background: #fff;
+            border: 2px solid #0077cc;
             border-radius: 5px;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             z-index: 1001;
-            color: #f0f0f0; /* Light text for alert */
         }
         .alert.active {
             display: block;
@@ -115,37 +87,27 @@
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">
-        <div class="loader"></div>
-    </div>
+    <div class="loading" id="loading">Loading...</div>
     <div class="alert" id="alert"></div>
 
     <h1>Assign Pemain Badminton</h1>
     <input type="text" id="playerName" placeholder="Masukkan Nama Anda" />
     <button onclick="addPlayer()">Tambahkan Pemain</button>
-    <button class="reset" onclick="resetTokens()">RESET</button>
+    <button onclick="resetTokens()">Reset Semua Token</button>
 
     <div class="group" id="groupA">
         <h2>Grup A</h2>
-        <p>Tim 1: <span id="teamA1Text">Belum ada pemain.</span></p>
         <div id="teamA1" class="team"></div>
-        <p>Tim 2: <span id="teamA2Text">Belum ada pemain.</span></p>
         <div id="teamA2" class="team"></div>
-        <p>Tim 3: <span id="teamA3Text">Belum ada pemain.</span></p>
         <div id="teamA3" class="team"></div>
-        <p>Tim 4: <span id="teamA4Text">Belum ada pemain.</span></p>
         <div id="teamA4" class="team"></div>
     </div>
 
     <div class="group" id="groupB">
         <h2>Grup B</h2>
-        <p>Tim 1: <span id="teamB1Text">Belum ada pemain.</span></p>
         <div id="teamB1" class="team"></div>
-        <p>Tim 2: <span id="teamB2Text">Belum ada pemain.</span></p>
         <div id="teamB2" class="team"></div>
-        <p>Tim 3: <span id="teamB3Text">Belum ada pemain.</span></p>
         <div id="teamB3" class="team"></div>
-        <p>Tim 4: <span id="teamB4Text">Belum ada pemain.</span></p>
         <div id="teamB4" class="team"></div>
     </div>
 
@@ -179,29 +141,22 @@
                 if (row['Nama Pemain'] && row['Grup'] && row['Tim']) {
                     const teamDiv = document.getElementById(`team${row['Grup']}${row['Tim']}`);
                     teamDiv.innerHTML += `${row['Nama Pemain']}<br />`;
-                    document.getElementById(`team${row['Grup']}${row['Tim']}Text`).textContent = '';
                 }
             });
         }
 
         async function addPlayer() {
+            showLoading();
             const playerName = document.getElementById('playerName').value.trim();
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('mytoken');
 
-            if (!playerName) {
-                showAlert('Nama pemain tidak boleh kosong.');
-                return;
-            }
-
-            showLoading();
-
-            if (token) {
+            if (playerName && token) {
                 const response = await fetch(SHEET_BEST_URL);
                 const data = await response.json();
-                hideLoading();
 
                 const tokenRow = data.find(row => row.Token === token);
+                hideLoading();
 
                 if (!tokenRow) {
                     showAlert('Token tidak valid.');
@@ -222,10 +177,6 @@
                             if (players.length < 2) {
                                 teamDiv.innerHTML += playerName + '<br />';
                                 playerAdded = true;
-
-                                // Update team text
-                                const teamText = document.getElementById(`team${assignedGroup}${assignedTeam}Text`);
-                                teamText.textContent = 'Pemain: ' + teamDiv.innerHTML.split('<br>').filter(name => name.trim()).join(', ');
                             }
                         }
 
@@ -285,8 +236,6 @@
                 for (let i = 1; i <= 4; i++) {
                     document.getElementById(`teamA${i}`).innerHTML = '';
                     document.getElementById(`teamB${i}`).innerHTML = '';
-                    document.getElementById(`teamA${i}Text`).textContent = 'Belum ada pemain.';
-                    document.getElementById(`teamB${i}Text`).textContent = 'Belum ada pemain.';
                 }
             }).catch(err => {
                 hideLoading();
