@@ -1,9 +1,292 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
-    </body>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Pemain Badminton</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        h1 {
+            color: #0d47a1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"] {
+            padding: 15px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 25px;
+            transition: box-shadow 0.3s;
+            font-size: 16px;
+        }
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0b3c7e;
+            transform: scale(1.05);
+        }
+        .reset-button {
+            background-color: #e53935;
+        }
+        .reset-button:hover {
+            background-color: #c62828;
+        }
+        .group {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 320px;
+        }
+        .team {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(240, 240, 240, 0.8);
+            transition: background-color 0.3s;
+        }
+        .team:hover {
+            background-color: rgba(220, 220, 220, 0.8);
+        }
+        .team h3 {
+            margin: 0;
+            color: #0d47a1;
+        }
+        .team-member {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #424242;
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.5s, top 0.5s;
+        }
+        .notification.show {
+            display: block;
+            opacity: 1;
+            top: 20px;
+        }
+        .loading-screen {
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .loading-screen.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 400px) {
+            input[type="text"] {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Assign Pemain Badminton</h1>
+    <input type="text" id="playerName" placeholder="Masukkan Nama Anda" />
+    <button onclick="addPlayer()">Tambahkan Pemain</button>
+    <button class="reset-button" onclick="resetTokens()">Reset</button>
+
+    <div class="group" id="groupA">
+        <h2>Grup A</h2>
+        <div id="teamA1" class="team"><h3>Tim 1</h3></div>
+        <div id="teamA2" class="team"><h3>Tim 2</h3></div>
+        <div id="teamA3" class="team"><h3>Tim 3</h3></div>
+        <div id="teamA4" class="team"><h3>Tim 4</h3></div>
+    </div>
+
+    <div class="group" id="groupB">
+        <h2>Grup B</h2>
+        <div id="teamB1" class="team"><h3>Tim 1</h3></div>
+        <div id="teamB2" class="team"><h3>Tim 2</h3></div>
+        <div id="teamB3" class="team"><h3>Tim 3</h3></div>
+        <div id="teamB4" class="team"><h3>Tim 4</h3></div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+    <div id="loadingScreen" class="loading-screen"><div class="loader"></div></div>
+
+    <script>
+        const SHEET_BEST_URL = 'https://sheet.best/api/sheets/7ee7d63c-feee-474a-96ac-10c8f2cc09ae';
+
+        async function loadPlayers() {
+            showLoadingScreen();
+            const response = await fetch(SHEET_BEST_URL);
+            const data = await response.json();
+
+            data.forEach(row => {
+                if (row['Nama Pemain'] && row['Grup'] && row['Tim']) {
+                    const teamDiv = document.getElementById(`team${row['Grup']}${row['Tim']}`);
+                    teamDiv.innerHTML += `<div class="team-member">${row['Nama Pemain']}</div>`;
+                }
+            });
+
+            hideLoadingScreen();
+        }
+
+        async function addPlayer() {
+            const playerName = document.getElementById('playerName').value.trim();
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('mytoken');
+
+            if (playerName && token) {
+                showLoadingScreen();
+                const response = await fetch(SHEET_BEST_URL);
+                const data = await response.json();
+                const tokenRow = data.find(row => row.Token === token);
+
+                if (!tokenRow) {
+                    showNotification('Token tidak valid.');
+                } else if (tokenRow.Status === 'used') {
+                    showNotification('Token sudah digunakan.');
+                } else if (!tokenRow['Nama Pemain']) {
+                    const rowIndex = data.indexOf(tokenRow);
+                    let playerAdded = false;
+
+                    while (!playerAdded) {
+                        const assignedGroup = Math.random() < 0.5 ? 'A' : 'B';
+                        const assignedTeam = Math.floor(Math.random() * 4) + 1;
+                        const teamDiv = document.getElementById(`team${assignedGroup}${assignedTeam}`);
+
+                        if (teamDiv.children.length < 2) {
+                            const updateResponse = await fetch(`${SHEET_BEST_URL}/${rowIndex}`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    'Nama Pemain': playerName,
+                                    'Grup': assignedGroup,
+                                    'Tim': assignedTeam,
+                                    'Status': 'used'
+                                })
+                            });
+
+                            if (updateResponse.ok) {
+                                teamDiv.innerHTML += `<div class="team-member">${playerName}</div>`;
+                                showNotification(`${playerName} berhasil ditambahkan ke Grup ${assignedGroup}, Tim ${assignedTeam}.`);
+                                playerAdded = true;
+                            }
+                        }
+                    }
+                } else {
+                    showNotification('Nama pemain sudah terdaftar.');
+                }
+                hideLoadingScreen();
+            } else {
+                showNotification('Masukkan nama yang valid dan pastikan token ada.');
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showLoadingScreen() {
+            document.getElementById('loadingScreen').classList.add('show');
+        }
+
+        function hideLoadingScreen() {
+            document.getElementById('loadingScreen').classList.remove('show');
+        }
+
+        async function resetTokens() {
+            showLoadingScreen();
+
+            const response = await fetch(SHEET_BEST_URL);
+            const data = await response.json();
+
+            const resetData = data.map(row => ({
+                'Nama Pemain': '',
+                'Grup': '',
+                'Tim': '',
+                'Status': 'unused'
+            }));
+
+            await Promise.all(resetData.map((row, index) => 
+                fetch(`${SHEET_BEST_URL}/${index}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(row)
+                })
+            ));
+
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`teamA${i}`).innerHTML = '<h3>Tim ' + i + '</h3>';
+                document.getElementById(`teamB${i}`).innerHTML = '<h3>Tim ' + i + '</h3>';
+            }
+
+            hideLoadingScreen();
+            showNotification('Semua token telah di-reset.');
+        }
+
+        window.onload = loadPlayers;
+    </script>
+</body>
 </html>
