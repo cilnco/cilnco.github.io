@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assign Pemain Badminton</title>
+    <title>Daftar Tournament Badminton</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,13 +17,13 @@
             color: #0077cc;
         }
         .group {
-            margin: 20px auto; /* Mengatur margin secara otomatis agar berada di tengah */
+            margin: 20px auto;
             padding: 20px;
             border: 1px solid #0077cc;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.8);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px; /* Mengatur lebar maksimum grup */
+            max-width: 600px;
         }
         .team {
             margin: 10px 0;
@@ -44,14 +44,14 @@
             width: 200px;
         }
         button {
-            padding: 10px 20px; /* Tambahkan padding */
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             background: #0077cc;
             color: white;
             cursor: pointer;
             transition: background 0.3s;
-            margin: 5px; /* Tambahkan margin */
+            margin: 5px;
         }
         button:hover {
             background: #005fa3;
@@ -67,9 +67,40 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
-            color: #0077cc;
         }
+
+        .loading .spinner {
+            width: 100px;
+            height: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .loading .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0077cc;
+            animation: bounce 0.6s infinite alternate;
+        }
+
+        .loading .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
         .alert {
             display: none;
             position: fixed;
@@ -89,10 +120,16 @@
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">Loading...</div>
+    <div class="loading" id="loading">
+        <div class="spinner">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
     <div class="alert" id="alert"></div>
 
-    <h1>Assign Pemain Badminton</h1>
+    <h1>Daftar Tournament Badminton</h1>
     <input type="text" id="playerName" placeholder="Masukkan Nama Anda" />
     <button onclick="addPlayer()">Tambahkan Pemain</button>
     <button id="resetButton" style="background: red; color: white;" onclick="resetTokens()">Reset (Admin Only)</button>
@@ -140,9 +177,9 @@
             hideLoading();
 
             data.forEach(row => {
-                if (row['Nama Pemain'] && row['Grup'] && row['Tim']) {
+                if (row['Nama Pemain'] && row['Alias'] && row['Grup'] && row['Tim']) {
                     const teamDiv = document.getElementById(`team${row['Grup']}${row['Tim']}`);
-                    teamDiv.innerHTML += `${row['Nama Pemain']}<br />`;
+                    teamDiv.innerHTML += `${row['Nama Pemain']} (${row['Alias']})<br />`;
                 }
             });
         }
@@ -152,6 +189,10 @@
             const playerName = document.getElementById('playerName').value.trim();
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('mytoken');
+            const addButton = document.querySelector('button[onclick="addPlayer()"]');
+
+            // Disable the button to prevent double input
+            addButton.disabled = true;
 
             if (playerName && token) {
                 const response = await fetch(SHEET_BEST_URL);
@@ -207,8 +248,11 @@
                     }
                 }
             } else {
-                showAlert('Masukkan nama yang valid dan pastikan token ada.');
+                showAlert('Masukkan nama yang valid dan pastikan token valid (hubungi panitia untuk mendapatkan token anda).');
             }
+
+            // Enable the button again after processing
+            addButton.disabled = false;
         }
 
         async function resetTokens() {
