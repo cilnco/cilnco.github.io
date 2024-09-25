@@ -117,6 +117,10 @@
         .alert.active {
             display: block;
         }
+
+        .hidden {
+    visibility: hidden;
+}
     </style>
 </head>
 <body>
@@ -130,8 +134,9 @@
     <div class="alert" id="alert"></div>
 
     <h1>Daftar Tournament Badminton</h1>
-    <input type="text" id="playerName" placeholder="Masukkan Nama Anda" />
-    <button onclick="addPlayer()">Tambahkan Saya</button>
+    <div id="greetingMessage" style="font-size: 1.2em; margin-top: 20px;"></div>
+    <input type="text" id="playerName" placeholder="Masukkan Nama Anda" disabled class="hidden"  /><br>
+    <button onclick="addPlayer()">Tambahkan Saya (Random)</button>
     <button id="resetButton" style="background: red; color: white;" onclick="resetTokens()">Reset (Admin Only)</button>
 
     <div class="group" id="groupA">
@@ -170,20 +175,37 @@
             }, 3000);
         }
 
-        async function loadPlayers() {
-            showLoading();
-            const response = await fetch(SHEET_BEST_URL);
-            const data = await response.json();
-            hideLoading();
+async function loadPlayers() {
+    showLoading();
+    const response = await fetch(SHEET_BEST_URL);
+    const data = await response.json();
+    hideLoading();
 
-            data.forEach(row => {
-                if (row['Nama Pemain'] && row['Alias'] && row['Grup'] && row['Tim']) {
-                    const teamDiv = document.getElementById(`team${row['Grup']}${row['Tim']}`);
-                    teamDiv.innerHTML += `${row['Nama Pemain']} (${row['Alias']})<br />`;
-                }
-            });
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('mytoken');
+    let aliasName = '';
+
+    data.forEach(row => {
+        if (row['Nama Pemain'] && row['Alias'] && row['Grup'] && row['Tim']) {
+            const teamDiv = document.getElementById(`team${row['Grup']}${row['Tim']}`);
+            teamDiv.innerHTML += `${row['Nama Pemain']} <br />`;
         }
 
+        // Ambil alias berdasarkan token
+        if (row.Token === token) {
+            aliasName = row['Alias'];
+        }
+    });
+
+    // Tampilkan pesan sambutan jika alias ditemukan
+    if (aliasName) {
+        document.getElementById('greetingMessage').textContent = `Halo ! ${aliasName}`;
+        document.getElementById('playerName').value = aliasName; // Masukkan alias ke input
+        document.getElementById('playerName').disabled = true; // Nonaktifkan input
+    } else {
+        document.getElementById('greetingMessage').textContent = 'Halo! Nama tidak ditemukan.';
+    }
+}
         async function addPlayer() {
     const playerName = document.getElementById('playerName').value.trim();
     const urlParams = new URLSearchParams(window.location.search);
@@ -195,7 +217,7 @@
 
     // Check if playerName and token are valid before showing loading
     if (!playerName || !token) {
-        showAlert('Masukkan nama yang valid dan pastikan token valid. (hubungi panitia untuk mendapatkan token)');
+        showAlert('Pastikan token valid. (hubungi panitia untuk mendapatkan token)');
         addButton.disabled = false; // Enable button if validation fails
         return; // Exit early if input is invalid
     }
